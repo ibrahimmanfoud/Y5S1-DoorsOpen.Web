@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'BlogThing' " />
   <ItemGroup>
     <None Include="wwwroot\assets\css\bootstrap.min.css" />
     <None Include="wwwroot\assets\css\bootstrap.min.css.map" />
