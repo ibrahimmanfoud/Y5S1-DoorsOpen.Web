@@ -61,6 +61,14 @@
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
+                            <input class="form-check-input" asp-for="GenderNeutralRestroomsAvailable" /> @Html.DisplayNameFor(model => model.GenderNeutralRestroomsAvailable)
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
                             <input class="form-check-input" asp-for="WheelchairAccessibleRestroom" /> @Html.DisplayNameFor(model => model.WheelchairAccessibleRestroom)
                             <span class="form-check-sign">
                                 <span class="check"></span>
@@ -103,7 +111,7 @@
                     <div class="form-group">
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
-                                @{                
+                                @{
                                     string image_src = Model.ImageURL;
                                 }
                                 @if (Model != null && Model.Image != null)

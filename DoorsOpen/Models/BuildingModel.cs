@@ -23,6 +23,8 @@ namespace DoorsOpen.Models
 		public bool WheelchairAccessible { get; set; }
 		[Display(Name = "Restrooms Available")]
 		public bool RestroomsAvailable { get; set; }
+		[Display(Name = "Gender Neutral Bathrooms Available")]
+		public bool GenderNeutralRestroomsAvailable { get; set; }
 		[Display(Name = "Wheelchair Accessible Restroom")]
 		public bool WheelchairAccessibleRestroom { get; set; }
 		[Display(Name = "Photography Allowed")]
@@ -64,6 +66,7 @@ namespace DoorsOpen.Models
 			Zip = original.Zip;
 			WheelchairAccessible = original.WheelchairAccessible;
 			RestroomsAvailable = original.RestroomsAvailable;
+			GenderNeutralRestroomsAvailable = original.GenderNeutralRestroomsAvailable;
 			WheelchairAccessibleRestroom = original.WheelchairAccessibleRestroom;
 			PhotographyAllowed = original.PhotographyAllowed;
 			StartTime = original.StartTime;
@@ -88,6 +91,8 @@ namespace DoorsOpen.Models
 		public bool WheelchairAccessible { get; set; }
 		[Display(Name = "Restrooms Available")]
 		public bool RestroomsAvailable { get; set; }
+		[Display(Name = "Gender Neutral Bathrooms Available")]
+		public bool GenderNeutralRestroomsAvailable { get; set; }
 		[Display(Name = "Wheelchair Accessible Restroom")]
 		public bool WheelchairAccessibleRestroom { get; set; }
 		[Display(Name = "Photography Allowed")]

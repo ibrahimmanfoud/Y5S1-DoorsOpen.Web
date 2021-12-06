@@ -63,7 +63,7 @@ namespace DoorsOpen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Building,Address1,Address2,City,State,Zip,WheelchairAccessible,RestroomsAvailable,WheelchairAccessibleRestroom,PhotographyAllowed,StartTime,EndTime,Capacity,HistoricalOverview,VisitorExperience,Image")] BuildingModel buildingModel, IFormFile upload)
+        public async Task<IActionResult> Create([Bind("Id,Building,Address1,Address2,City,State,Zip,WheelchairAccessible,RestroomsAvailable,GenderNeutralRestroomsAvailable,WheelchairAccessibleRestroom,PhotographyAllowed,StartTime,EndTime,Capacity,HistoricalOverview,VisitorExperience,Image")] BuildingModel buildingModel, IFormFile upload)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace DoorsOpen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Building,Address1,Address2,City,State,Zip,WheelchairAccessible,RestroomsAvailable,WheelchairAccessibleRestroom,PhotographyAllowed,StartTime,EndTime,Capacity,HistoricalOverview,VisitorExperience,Image")] BuildingModel buildingModel, IFormFile upload)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Building,Address1,Address2,City,State,Zip,WheelchairAccessible,RestroomsAvailable,GenderNeutralRestroomsAvailable,WheelchairAccessibleRestroom,PhotographyAllowed,StartTime,EndTime,Capacity,HistoricalOverview,VisitorExperience,Image")] BuildingModel buildingModel, IFormFile upload)
         {
             if (id != buildingModel.Id)
             {
@@ -147,6 +147,7 @@ namespace DoorsOpen.Controllers
                 buildingToEdit.Zip = buildingModel.Zip;
                 buildingToEdit.WheelchairAccessible = buildingModel.WheelchairAccessible;
                 buildingToEdit.RestroomsAvailable = buildingModel.RestroomsAvailable;
+                buildingToEdit.GenderNeutralRestroomsAvailable = buildingModel.GenderNeutralRestroomsAvailable;
                 buildingToEdit.WheelchairAccessibleRestroom = buildingModel.WheelchairAccessibleRestroom;
                 buildingToEdit.PhotographyAllowed = buildingModel.PhotographyAllowed;
                 buildingToEdit.StartTime = buildingModel.StartTime;
