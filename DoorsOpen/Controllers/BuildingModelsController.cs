@@ -48,7 +48,6 @@ namespace DoorsOpen.Controllers
             {
                 return NotFound();
             }
-
             return View(new BuildingViewModel(buildingModel, _config.GetValue<string>("AzureImagePrefix")));
         }
 
@@ -76,7 +75,7 @@ namespace DoorsOpen.Controllers
                 
                 _context.Add(buildingModel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "BuildingImage");
             }
             return View(buildingModel);
         }
@@ -159,7 +158,7 @@ namespace DoorsOpen.Controllers
 
                 _context.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "BuildingImage");
             }
             return View(buildingModel);
         }
