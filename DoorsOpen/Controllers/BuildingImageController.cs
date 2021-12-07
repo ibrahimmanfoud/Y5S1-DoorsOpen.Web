@@ -27,9 +27,9 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage
         public async Task<IActionResult> Index()
         {
-            ViewBag.allBuildingModel = await _context.Buildings
-                .ToListAsync();
-            return View(await _context.BuildingImages.ToListAsync());
+            var buildingModels = _context.Buildings.ToList();
+            ViewBag.allBuildingModels = buildingModels;
+            return View(await _context.BuildingImages.OrderBy(x => x.BuildingId).ToListAsync());
         }
 
         // GET: BuildingImage/Details/5
