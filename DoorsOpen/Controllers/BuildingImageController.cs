@@ -44,8 +44,10 @@ namespace DoorsOpen.Controllers
         }
 
         // GET: BuildingImage/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.allBuildingModels = await  _context.Buildings.ToListAsync();
+
             return View();
         }
 
@@ -62,6 +64,7 @@ namespace DoorsOpen.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(buildingImageModel);
         }
 
