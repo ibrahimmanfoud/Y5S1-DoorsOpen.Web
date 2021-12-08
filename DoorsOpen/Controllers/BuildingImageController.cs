@@ -29,6 +29,7 @@ namespace DoorsOpen.Controllers
         {
             var buildingModels = _context.Buildings.ToList();
             ViewBag.allBuildingModels = buildingModels;
+            
             return View(await _context.BuildingImages.OrderBy(x => x.BuildingId).ToListAsync());
         }
 
