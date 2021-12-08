@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoorsOpen.Data;
 using DoorsOpen.Models;
+
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -48,7 +49,8 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
-            return View(buildingImageModel);
+            return View(new BuildingImageViewModel(buildingImageModel,
+                _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // GET: BuildingImage/Create
@@ -96,7 +98,7 @@ namespace DoorsOpen.Controllers
             {
                 return NotFound();
             }
-            return View(buildingImageModel);
+            return View(new BuildingImageViewModel(buildingImageModel, _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // POST: BuildingImage/Edit/5
@@ -104,7 +106,7 @@ namespace DoorsOpen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,ImageURL,AltText")] BuildingImageModel buildingImageModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,ImageURL,AltText")] BuildingImageModel buildingImageModel, IFormFile upload)
         {
             if (id != buildingImageModel.Id)
             {
@@ -113,23 +115,39 @@ namespace DoorsOpen.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var imageToEdit = await _context.BuildingImages.Where(b => b.Id == buildingImageModel.Id).FirstOrDefaultAsync();
+                var deleteImage = false;
+                if(imageToEdit.ImageURL != buildingImageModel.ImageURL || upload != null)
                 {
-                    _context.Update(buildingImageModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BuildingImageModelExists(buildingImageModel.Id))
+                    if (!string.IsNullOrEmpty(buildingImageModel.ImageURL))
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        deleteImage = true;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                if (deleteImage)
+                {
+                    if (!string.IsNullOrEmpty(buildingImageModel.ImageURL))
+                    {
+                        DeleteFromAzure(buildingImageModel.ImageURL);
+                        buildingImageModel.ImageURL = null;
+                    }
+                }
+
+                if (upload != null)
+                {
+                    string imageName = GetFileName(upload);
+                    buildingImageModel.ImageURL = imageName;
+                    UploadToAzure(imageName, upload);
+                    Console.WriteLine(buildingImageModel.ImageURL);
+                }
+
+                imageToEdit.ImageURL = buildingImageModel.ImageURL;
+                imageToEdit.AltText = buildingImageModel.AltText;
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", "BuildingImage");
             }
             return View(buildingImageModel);
         }

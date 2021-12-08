@@ -1,4 +1,4 @@
-@model DoorsOpen.Models.BuildingImageModel
+@model DoorsOpen.Models.BuildingImageViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -19,9 +19,27 @@
                 <span asp-validation-for="BuildingId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageURL" class="control-label"></label>
-                <input asp-for="ImageURL" class="form-control" />
-                <span asp-validation-for="ImageURL" class="text-danger"></span>
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
+                        @{ string image_src = Model.ImageURL; }
+                        @if (Model != null && Model.ImageURL != null)
+                        {
+            <img src="@image_src" class="photo" id="imageUrl" alt="..." /> }
+                        else
+                        {
+            <img src="/content/img/400x400.png" class="photo" id="imageUrl" alt="...">}
+                    </div>
+                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                    </div>
+                    <div>
+                        <span class="btn btn-default btn-file"><span class="fileinput-new">Change Image</span><span class="fileinput-exists">Change</span><input type="file" name="upload"></span>
+                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Original</a>
+                        <div class="btn btn-default fileinput-new" id="delete-image">Remove Image</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ImageURL" />
             </div>
             <div class="form-group">
                 <label asp-for="AltText" class="control-label"></label>

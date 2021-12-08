@@ -158,7 +158,7 @@ namespace DoorsOpen.Controllers
 
                 _context.SaveChanges();
 
-                return RedirectToAction("Index", "BuildingImage");
+                return RedirectToAction("Index", "BuildingModels");
             }
             return View(buildingModel);
         }
