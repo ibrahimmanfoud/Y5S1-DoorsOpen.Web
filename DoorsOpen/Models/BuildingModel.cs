@@ -50,6 +50,8 @@ namespace DoorsOpen.Models
 				return $"{Address1} {Address2} {City}, {State} {Zip}";
 			}
 		}
+
+		public string AltText { get; set; }
 	}
 
 	public class BuildingViewModel
@@ -76,6 +78,8 @@ namespace DoorsOpen.Models
 			VisitorExperience = original.VisitorExperience;
 			Image = original.Image;
 			ImageURL = baseURL + Image;
+			AltText = original.AltText;
+
 		}
 		
 		public int Id { get; set; }
@@ -119,7 +123,8 @@ namespace DoorsOpen.Models
 			}
 		}
 
-		public string ImageURL { get; set; } 
-		
+		public string ImageURL { get; set; }
+		public string AltText { get; set; }
+
 	}
 }
