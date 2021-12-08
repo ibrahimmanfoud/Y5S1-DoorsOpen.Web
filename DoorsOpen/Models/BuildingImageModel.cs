@@ -20,7 +20,7 @@ namespace DoorsOpen.Models
 		{
 			Id = original.Id;
 			BuildingId = original.BuildingId;
-			ImageURL = original.ImageURL;
+			ImageURL = baseURL + original.ImageURL;
 			AltText = original.AltText;
 		}
 

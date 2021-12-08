@@ -1,11 +1,12 @@
 .card{
     border: 0;
     border-radius: $border-radius-small;
-    display: inline-block;
+    display: flex;
     position: relative;
     width: 100%;
     margin-bottom: 20px;
     box-shadow: $box-shadow;
+    min-height: max-content;
 
     [data-notify="container"].alert {
       min-width: auto;
