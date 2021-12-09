@@ -182,6 +182,8 @@ namespace DoorsOpen.Controllers
             {
                 return NotFound();
             }
+            
+            ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
 
             // Return the delete view with a buldingImageViewModel based on the previously created selectedBuilding
             return View(new BuildingImageViewModel(selectedImage, _config.GetValue<string>("AzureImagePrefix")));
