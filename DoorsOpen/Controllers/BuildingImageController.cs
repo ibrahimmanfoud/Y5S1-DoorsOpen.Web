@@ -43,6 +43,7 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
+            
             // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed
             var selectedImage = await _context.BuildingImages.FindAsync(id);
 
@@ -50,6 +51,9 @@ namespace DoorsOpen.Controllers
             {
                 return NotFound();
             }
+
+            //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
+             ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
 
             // Return the details view with a buldingImageViewModel based on the previously created selectedImage
             return View(new BuildingImageViewModel(selectedImage,
