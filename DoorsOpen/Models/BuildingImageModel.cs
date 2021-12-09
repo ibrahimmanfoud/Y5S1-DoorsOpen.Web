@@ -21,7 +21,7 @@ namespace DoorsOpen.Models
 			Id = original.Id;
 			BuildingId = original.BuildingId;
 			ImageURL = baseURL + original.ImageURL;
-			AltText = original.AltText;
+			AltText = baseURL + original.AltText;
 		}
 
 		public int Id { get; set; }

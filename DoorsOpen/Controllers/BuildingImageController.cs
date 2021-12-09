@@ -167,7 +167,7 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
-            return View(buildingImageModel);
+            return View(new BuildingImageViewModel(buildingImageModel, _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // POST: BuildingImage/Delete/5
