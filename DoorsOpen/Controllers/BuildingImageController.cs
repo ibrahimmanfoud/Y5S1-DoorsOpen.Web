@@ -14,7 +14,9 @@ namespace DoorsOpen.Controllers
 {
     public class BuildingImageController : Controller
     {
+        // Allows access to the database via the _context variable
         private readonly SiteDbContext _context;
+        // Allows access to the Azure file storage system
         private readonly IConfiguration _config;
 
         public BuildingImageController(SiteDbContext context, IConfiguration configuration)
@@ -26,9 +28,10 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage
         public async Task<IActionResult> Index()
         {
-            var buildingModels = _context.Buildings.ToList();
-            ViewBag.allBuildingModels = buildingModels;
+            // Adds all building models to the viewBag for the index view
+            ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
             
+            // Returns the index view with all building images ordered by BuildingId as the model
             return View(await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync());
         }
 
@@ -40,20 +43,23 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
-            var buildingImageModel = await _context.BuildingImages
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (buildingImageModel == null)
+            // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed
+            var selectedImage = await _context.BuildingImages.FindAsync(id);
+
+            if (selectedImage == null)
             {
                 return NotFound();
             }
 
-            return View(new BuildingImageViewModel(buildingImageModel,
+            // Return the details view with a buldingImageViewModel based on the previously created selectedImage
+            return View(new BuildingImageViewModel(selectedImage,
                 _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // GET: BuildingImage/Create
         public async Task<IActionResult> Create()
         {
+            // Adds all building models to the viewBag for the create view
             ViewBag.allBuildingModels = await  _context.Buildings.ToListAsync();
 
             return View();
@@ -92,17 +98,19 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
-            var buildingImageModel = await _context.BuildingImages.FindAsync(id);
-            if (buildingImageModel == null)
+            // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed 
+            var selectedBuilding = await _context.BuildingImages.FindAsync(id);
+            if (selectedBuilding == null)
             {
                 return NotFound();
             }
 
-            ViewBag.selectedBuilding = await _context.Buildings
-                .FirstOrDefaultAsync(m => m.Id == buildingImageModel.BuildingId);
+            // Add the selected building and all building models to the viewbag
+            ViewBag.selectedBuilding = selectedBuilding;
             ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
 
-            return View(new BuildingImageViewModel(buildingImageModel, _config.GetValue<string>("AzureImagePrefix")));
+            // Return the edit view with a buldingImageViewModel based on the previously created selectedBuilding
+            return View(new BuildingImageViewModel(selectedBuilding, _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // POST: BuildingImage/Edit/5
@@ -119,7 +127,7 @@ namespace DoorsOpen.Controllers
 
             if (ModelState.IsValid)
             {
-                var imageToEdit = await _context.BuildingImages.Where(b => b.Id == buildingImageModel.Id).FirstOrDefaultAsync();
+                var imageToEdit = await _context.BuildingImages.FindAsync(id);
                 var deleteImage = false;
                 if(imageToEdit.ImageURL != buildingImageModel.ImageURL || upload != null)
                 {
@@ -164,14 +172,15 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
-            var buildingImageModel = await _context.BuildingImages
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (buildingImageModel == null)
+            // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed 
+            var selectedImage = await _context.BuildingImages.FindAsync(id);
+            if (selectedImage == null)
             {
                 return NotFound();
             }
 
-            return View(new BuildingImageViewModel(buildingImageModel, _config.GetValue<string>("AzureImagePrefix")));
+            // Return the delete view with a buldingImageViewModel based on the previously created selectedBuilding
+            return View(new BuildingImageViewModel(selectedImage, _config.GetValue<string>("AzureImagePrefix")));
         }
 
         // POST: BuildingImage/Delete/5
@@ -193,7 +202,7 @@ namespace DoorsOpen.Controllers
 
         public string GetFileName(IFormFile upload)
         {
-            int indexExt = 0;
+            int indexExt;
             string ext;
             string imageName = null;
             if (upload != null)
