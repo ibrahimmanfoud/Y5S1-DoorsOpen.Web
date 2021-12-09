@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DoorsOpen.Data;
 using DoorsOpen.Models;
@@ -31,7 +29,7 @@ namespace DoorsOpen.Controllers
             var buildingModels = _context.Buildings.ToList();
             ViewBag.allBuildingModels = buildingModels;
             
-            return View(await _context.BuildingImages.OrderBy(x => x.BuildingId).ToListAsync());
+            return View(await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync());
         }
 
         // GET: BuildingImage/Details/5
@@ -88,6 +86,7 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -98,6 +97,11 @@ namespace DoorsOpen.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.selectedBuilding = await _context.Buildings
+                .FirstOrDefaultAsync(m => m.Id == buildingImageModel.BuildingId);
+            ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
+
             return View(new BuildingImageViewModel(buildingImageModel, _config.GetValue<string>("AzureImagePrefix")));
         }
 
