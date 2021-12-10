@@ -59,6 +59,13 @@
                 @Html.DisplayFor(model => model.RestroomsAvailable)
             </dd>
             <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.GenderNeutralRestroomsAvailable)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.GenderNeutralRestroomsAvailable)
+            </dd>
+
+            <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.WheelchairAccessibleRestroom)
             </dt>
             <dd class="col-sm-10">
@@ -101,13 +108,13 @@
                 @Html.DisplayFor(model => model.VisitorExperience)
             </dd>
         </dl>
-        @* Testing displaying uploaded image on details page *@
-        <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
-            @{ string image_src = Model.ImageURL;}
+            @* Testing displaying uploaded image on details page *@
+                <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
+                    @{ string image_src = Model.ImageURL;}
 
-            <img src="@image_src" class="photo" id="imageUrl" alt="..." />
-        </div>
-    </div>
+                    <img src="@image_src" class="photo" id="imageUrl" alt="..." />
+                </div>
+</div>
 </div>
 
 <div style="margin-top: 20px;">
