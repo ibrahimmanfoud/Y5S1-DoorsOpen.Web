@@ -30,7 +30,18 @@ namespace DoorsOpen.Controllers
         {
           // Adds all building models to the viewBag for the index view
                 ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
-            
+            var buildingImagesIndex = await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync();
+            foreach(var img in buildingImagesIndex)
+            {
+                if (img.ImageURL == null)
+                {
+                    img.ImageURL = " ";
+                }
+                else { 
+                img.ImageURL = _config.GetValue<string>("AzureImagePrefix") + img.ImageURL;
+                }
+            }
+
             // Returns the index view with all building images ordered by BuildingId as the model
             return View(await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync());
         }
