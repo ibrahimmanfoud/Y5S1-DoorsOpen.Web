@@ -28,8 +28,8 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage
         public async Task<IActionResult> Index()
         {
-            // Adds all building models to the viewBag for the index view
-            ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
+          // Adds all building models to the viewBag for the index view
+                ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
             
             // Returns the index view with all building images ordered by BuildingId as the model
             return View(await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync());

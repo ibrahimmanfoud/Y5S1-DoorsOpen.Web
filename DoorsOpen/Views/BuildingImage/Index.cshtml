@@ -2,7 +2,7 @@
 
 @{ ViewData["Title"] = "Index"; }
 
-<h1>Extra Building Images</h1>
+<h1>Building Image Gallery</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -30,22 +30,29 @@
 
         @foreach (var item in Model)
         {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.BuildingId)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.ImageURL)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.AltText)
-    </td>
-    <td>
-        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-    </td>
-</tr>}
+        <tr>
+            <td>
+                @foreach (var building in ViewBag.allBuildingModels)
+                {
+                    @if (building.Id == item.BuildingId)
+                    {
+                        @building.Building
+                    }
+                }
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageURL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AltText)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>}
     </tbody>
 </table>
 
