@@ -63,6 +63,8 @@ namespace DoorsOpen.Controllers
                 return NotFound();
             }
 
+
+
             //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
              ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
 
