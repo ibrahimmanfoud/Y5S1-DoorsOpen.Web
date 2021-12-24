@@ -1,4 +1,4 @@
-@model DoorsOpen.Models.BuildingImageViewModel
+@model DoorsOpen.Models.BuildingImageModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div>
@@ -24,7 +24,7 @@
             <div class="form-group">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
-                        @{ string image_src = Model.ImageURL; }
+                        @{ string image_src = ViewBag.azurePrefix + Model.ImageURL; }
                         @if (Model != null && Model.ImageURL != null)
                         {
             <img src="@image_src" class="photo" id="imageUrl" alt="..." /> }

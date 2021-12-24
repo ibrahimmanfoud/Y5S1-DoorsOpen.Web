@@ -121,11 +121,11 @@ namespace DoorsOpen.Controllers
             }
 
             // Add the selected building and all building models to the viewbag
-            ViewBag.selectedBuilding = selectedBuilding;
             ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
+            ViewBag.azurePrefix = _config.GetValue<string>("AzureImagePrefix");
 
             // Return the edit view with a buldingImageViewModel based on the previously created selectedBuilding
-            return View(new BuildingImageViewModel(selectedBuilding, _config.GetValue<string>("AzureImagePrefix")));
+            return View(selectedBuilding);
         }
 
         // POST: BuildingImage/Edit/5
@@ -135,6 +135,7 @@ namespace DoorsOpen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,ImageURL,AltText")] BuildingImageModel buildingImageModel, IFormFile upload)
         {
+
             if (id != buildingImageModel.Id)
             {
                 return NotFound();
