@@ -42,10 +42,10 @@
                 
             </td>
             <td>
-                <img src=@item.ImageURL alt="" border=3 height=100 width=100 />
+                <img src=@item.ImageURL alt="" height=100 width=100 />
             </td>
             <td>
-                @Html.DisplayNameFor(item => item.AltText)
+                @item.AltText
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -57,7 +57,6 @@
 </table>
 
 <div>
-    <a asp-action="Index">Image Gallery</a><span> || </span>
     <a href="/BuildingModels">Buildings List</a>
 </div>
 

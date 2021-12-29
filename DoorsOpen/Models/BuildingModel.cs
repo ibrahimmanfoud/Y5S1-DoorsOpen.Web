@@ -150,8 +150,7 @@ namespace DoorsOpen.Models
 			Capacity = original.Capacity;
 			HistoricalOverview = original.HistoricalOverview;
 			VisitorExperience = original.VisitorExperience;
-			Image = original.Image;
-			ImageURL = baseURL + Image;
+			ImageURL = baseURL + original.Image;
 			AltText = original.AltText;
 			this.images = images;
 		}
@@ -184,8 +183,6 @@ namespace DoorsOpen.Models
 		public string HistoricalOverview { get; set; }
 		[Display(Name = "Visitor Experience")]
 		public string VisitorExperience { get; set; }
-
-		public string Image { get; set; }
 
 		public string FullAddress
 		{

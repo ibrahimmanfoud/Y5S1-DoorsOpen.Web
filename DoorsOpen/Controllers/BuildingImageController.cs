@@ -14,9 +14,7 @@ namespace DoorsOpen.Controllers
 {
     public class BuildingImageController : Controller
     {
-        // Allows access to the database via the _context variable
         private readonly SiteDbContext _context;
-        // Allows access to the Azure file storage system
         private readonly IConfiguration _config;
 
         public BuildingImageController(SiteDbContext context, IConfiguration configuration)
@@ -28,10 +26,9 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage
         public async Task<IActionResult> Index()
         {
-          // Adds all building models to the viewBag for the index view
-                ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
-            var buildingImagesIndex = await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync();
-            foreach(var img in buildingImagesIndex)
+            ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
+            var buildingImages = await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync();
+            foreach(var img in buildingImages)
             {
                 if (img.ImageURL == null)
                 {
@@ -43,7 +40,7 @@ namespace DoorsOpen.Controllers
             }
 
             // Returns the index view with all building images ordered by BuildingId as the model
-            return View(await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync());
+            return View(buildingImages);
         }
 
         // GET: BuildingImage/Details/5
@@ -61,19 +58,14 @@ namespace DoorsOpen.Controllers
             if (selectedImage == null)
             {
                 return NotFound();
-<<<<<<< HEAD
             }
 
             //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
              ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
-=======
-            }
-
 
 
             //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
              ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
->>>>>>> 9d864b5a45a3cf4afdcd0ccab01fcac1bee9ad5a
 
             // Return the details view with a buldingImageViewModel based on the previously created selectedImage
             return View(new BuildingImageViewModel(selectedImage,
@@ -144,6 +136,7 @@ namespace DoorsOpen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,ImageURL,AltText")] BuildingImageModel buildingImageModel, IFormFile upload)
         {
+            Console.WriteLine(buildingImageModel.ImageURL);
 
             if (id != buildingImageModel.Id)
             {
@@ -176,9 +169,9 @@ namespace DoorsOpen.Controllers
                     string imageName = GetFileName(upload);
                     buildingImageModel.ImageURL = imageName;
                     UploadToAzure(imageName, upload);
-                    Console.WriteLine(buildingImageModel.ImageURL);
                 }
 
+                imageToEdit.BuildingId = buildingImageModel.BuildingId;
                 imageToEdit.ImageURL = buildingImageModel.ImageURL;
                 imageToEdit.AltText = buildingImageModel.AltText;
 
