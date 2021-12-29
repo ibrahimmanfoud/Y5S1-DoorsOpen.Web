@@ -90,13 +90,21 @@ namespace DoorsOpen.Controllers
             eventModel.IsActive = true;
 
             var allOtherEvents = await _context.Events.Where(m => m.Id != id).ToListAsync();
-            foreach (EventModel e in allOtherEvents)
-            {
-                e.IsActive = false;
-            }
+          
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> SetInActive(int id)
+        {
+            var eventModel = await _context.Events.FirstOrDefaultAsync(m => m.Id == id);
+            eventModel.IsActive = false;
+
+            var allOtherEvents = await _context.Events.Where(m => m.Id != id).ToListAsync();
+           
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: EventModels/Edit/5
         public async Task<IActionResult> Edit(int? id)

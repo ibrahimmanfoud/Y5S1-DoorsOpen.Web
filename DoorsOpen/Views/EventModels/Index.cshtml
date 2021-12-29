@@ -46,8 +46,7 @@
                             @{
                                 if (item.IsActive)
                                 {
-                                    <span style="color:green">Yes </span>
-                                }
+                                    <a asp-action="SetInActive" asp-route-id="@item.Id" class="btn btn-primary btn-sm" role="button">Set InActive</a>                                }
                                 else
                                 {
                                     <a asp-action="SetActive" asp-route-id="@item.Id" class="btn btn-primary btn-sm" role="button">Set Active</a>
