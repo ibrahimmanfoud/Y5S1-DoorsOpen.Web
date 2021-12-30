@@ -27,47 +27,32 @@ namespace DoorsOpen.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
+
             var buildingImages = await _context.BuildingImages.OrderBy(m => m.BuildingId).ToListAsync();
             foreach(var img in buildingImages)
             {
                 if (img.ImageURL == null)
-                {
                     img.ImageURL = " ";
-                }
-                else { 
                 img.ImageURL = _config.GetValue<string>("AzureImagePrefix") + img.ImageURL;
-                }
             }
 
-            // Returns the index view with all building images ordered by BuildingId as the model
             return View(buildingImages);
         }
 
-        // GET: BuildingImage/Details/5
+        // GET: BuildingImage/Details/(id)
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             
-            // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed
             var selectedImage = await _context.BuildingImages.FindAsync(id);
 
             if (selectedImage == null)
-            {
                 return NotFound();
-            }
 
-            //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
-             ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
+            ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
 
-
-            //Create ViewBag to hold info of all buildings in order to display the correct name instead of BuildingID in Details View
-             ViewBag.buildingName = await _context.Buildings.FirstOrDefaultAsync(m => m.Id == selectedImage.BuildingId);
-
-            // Return the details view with a buldingImageViewModel based on the previously created selectedImage
             return View(new BuildingImageViewModel(selectedImage,
                 _config.GetValue<string>("AzureImagePrefix")));
         }
@@ -75,7 +60,6 @@ namespace DoorsOpen.Controllers
         // GET: BuildingImage/Create
         public async Task<IActionResult> Create()
         {
-            // Adds all building models to the viewBag for the create view
             ViewBag.allBuildingModels = await  _context.Buildings.ToListAsync();
 
             return View();
@@ -105,28 +89,20 @@ namespace DoorsOpen.Controllers
             return View(buildingImageModel);
         }
 
-        // GET: BuildingImage/Edit/5
+        // GET: BuildingImage/Edit/(id)
         public async Task<IActionResult> Edit(int? id)
         {
-
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            // Create a buildingImageModel variable which contains the appropriate buldingImage based upon the id parameter passed 
-            var selectedBuilding = await _context.BuildingImages.FindAsync(id);
-            if (selectedBuilding == null)
-            {
+            var selectedImage = await _context.BuildingImages.FindAsync(id);
+            if (selectedImage == null)
                 return NotFound();
-            }
 
-            // Add the selected building and all building models to the viewbag
-            ViewBag.allBuildingModels = await _context.Buildings.ToListAsync();
-            ViewBag.azurePrefix = _config.GetValue<string>("AzureImagePrefix");
+            ViewBag.imageURL = _config.GetValue<string>("AzureImagePrefix") + selectedImage.ImageURL;
+            ViewBag.allBuildings = await _context.Buildings.ToListAsync();
 
-            // Return the edit view with a buldingImageViewModel based on the previously created selectedBuilding
-            return View(selectedBuilding);
+            return View(selectedImage);
         }
 
         // POST: BuildingImage/Edit/5
@@ -136,7 +112,6 @@ namespace DoorsOpen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BuildingId,ImageURL,AltText")] BuildingImageModel buildingImageModel, IFormFile upload)
         {
-            Console.WriteLine(buildingImageModel.ImageURL);
 
             if (id != buildingImageModel.Id)
             {
@@ -145,37 +120,33 @@ namespace DoorsOpen.Controllers
 
             if (ModelState.IsValid)
             {
-                var imageToEdit = await _context.BuildingImages.FindAsync(id);
                 var deleteImage = false;
-                if(imageToEdit.ImageURL != buildingImageModel.ImageURL || upload != null)
+                if (!string.IsNullOrEmpty(buildingImageModel.ImageURL))
                 {
-                    if (!string.IsNullOrEmpty(buildingImageModel.ImageURL))
-                    {
-                        deleteImage = true;
-                    }
+                    deleteImage = true;
                 }
 
                 if (deleteImage)
                 {
-                    if (!string.IsNullOrEmpty(buildingImageModel.ImageURL))
-                    {
-                        DeleteFromAzure(buildingImageModel.ImageURL);
-                        buildingImageModel.ImageURL = null;
-                    }
+                    DeleteFromAzure(buildingImageModel.ImageURL);
+                    buildingImageModel.ImageURL = null;
                 }
 
                 if (upload != null)
                 {
-                    string imageName = GetFileName(upload);
-                    buildingImageModel.ImageURL = imageName;
-                    UploadToAzure(imageName, upload);
+                    buildingImageModel.ImageURL = GetFileName(upload);
+                    UploadToAzure(buildingImageModel.ImageURL, upload);
+                }
+                else
+                {
+                    buildingImageModel.ImageURL = "";
                 }
 
-                imageToEdit.BuildingId = buildingImageModel.BuildingId;
-                imageToEdit.ImageURL = buildingImageModel.ImageURL;
-                imageToEdit.AltText = buildingImageModel.AltText;
-
-                _context.SaveChanges();
+                _context.Attach(buildingImageModel);
+                _context.Entry(buildingImageModel).Property(p => p.BuildingId).IsModified = true;
+                _context.Entry(buildingImageModel).Property(p => p.ImageURL).IsModified = true;
+                _context.Entry(buildingImageModel).Property(p => p.AltText).IsModified = true;
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "BuildingImage");
             }

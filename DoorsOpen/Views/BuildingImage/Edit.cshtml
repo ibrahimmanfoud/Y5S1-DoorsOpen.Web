@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="Id" />
             <div>
                 <select asp-for="BuildingId" class="form-control">
-                    @foreach (var building in ViewBag.allBuildingModels)
+                    @foreach (var building in ViewBag.allBuildings)
                     {
                         <option value=@building.Id>@building.Building</option>
                     }
@@ -24,7 +24,7 @@
             <div class="form-group">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
-                        @{ string image_src = ViewBag.azurePrefix + Model.ImageURL; }
+                        @{ string image_src = ViewBag.imageURL; }
                         @if (Model != null && Model.ImageURL != null)
                         {
                             <img src="@image_src" class="photo" id="imageUrl" alt="..." /> }
